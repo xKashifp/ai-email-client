@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-textMain;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-surface/80 backdrop-blur-md border border-border/50 shadow-lg;
+  }
+  
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-surface border border-border text-textMain rounded-lg hover:bg-surface/80 transition-all active:scale-95;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-textMain placeholder-textMuted;
+  }
+}
+
+/* Custom Scrollbar for dark mode aesthetics */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
