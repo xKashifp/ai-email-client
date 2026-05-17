@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Menu, Inbox, Send, Archive, Settings, Sparkles, Plus, Loader2, RefreshCw } from 'lucide-react';
+import { Search, Menu, Inbox, Send, Archive, Settings, Sparkles, Plus, Loader2, RefreshCw, ArrowLeft } from 'lucide-react';
 
 export default function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768);
   const [activeTab, setActiveTab] = useState('inbox');
   
   // Data States
@@ -138,12 +138,13 @@ export default function App() {
     setSelectedEmail(email);
     setSummary(null); // Clear summary for new email
     setDraft('');
+    if (window.innerWidth < 768) setIsSidebarOpen(false);
   };
 
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden text-sm">
       {/* Sidebar */}
-      <aside className={`w-64 glass-panel border-r border-border flex flex-col transition-all duration-300 z-20 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full absolute h-full'}`}>
+      <aside className={`w-64 glass-panel border-r border-border flex flex-col transition-transform duration-300 z-30 absolute md:relative h-full ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-4 flex items-center justify-between border-b border-border/50">
           <div className="flex items-center gap-2 font-semibold text-primary">
             <Sparkles size={20} />
@@ -191,7 +192,7 @@ export default function App() {
 
         <div className="flex-1 flex overflow-hidden">
           {/* Email List */}
-          <div className="w-full md:w-2/5 lg:w-1/3 border-r border-border/50 flex flex-col bg-background/50">
+          <div className={`${selectedEmail ? 'hidden md:flex' : 'flex'} w-full md:w-2/5 lg:w-1/3 border-r border-border/50 flex-col bg-background/50`}>
              <div className="flex-1 overflow-y-auto">
                {isLoadingEmails && emails.length === 0 ? (
                  <div className="p-8 text-center text-textMuted flex flex-col items-center">
@@ -228,9 +229,12 @@ export default function App() {
 
           {/* Email Detail View */}
           {selectedEmail ? (
-            <div className="hidden md:flex flex-1 flex-col bg-background">
-               <div className="p-6 border-b border-border/50 flex justify-between items-start">
+            <div className="flex flex-1 flex-col bg-background overflow-hidden w-full max-w-full">
+               <div className="p-4 md:p-6 border-b border-border/50 flex justify-between items-start">
                  <div>
+                   <button onClick={() => setSelectedEmail(null)} className="md:hidden flex items-center gap-2 text-textMuted hover:text-textMain mb-4">
+                     <ArrowLeft size={16} /> Back
+                   </button>
                    <h1 className="text-xl font-semibold mb-4 text-textMain leading-tight">{selectedEmail.subject}</h1>
                    <div className="flex items-center gap-3">
                      <div className="w-10 h-10 rounded-full bg-secondary/20 text-secondary flex items-center justify-center font-bold">
