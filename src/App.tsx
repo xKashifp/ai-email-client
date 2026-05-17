@@ -110,8 +110,7 @@ export default function App() {
     e.preventDefault();
     setIsAdding(true);
     try {
-      // 1. Add account
-      const response = await fetch('http://localhost:3001/api/accounts/add', {
+      const response = await fetch('/api/accounts/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(imapForm)
@@ -120,20 +119,18 @@ export default function App() {
       
       if (data.success) {
         setShowAddAccount(false);
-        // 2. Automatically trigger fetch for this new account
         setIsLoadingEmails(true);
-        await fetch('http://localhost:3001/api/emails/fetch', {
+        await fetch('/api/emails/fetch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ accountId: data.accountId })
         });
-        // 3. Reload from DB
         await fetchEmailsFromDB();
       } else {
-        alert("Failed to connect: " + data.error);
+        alert(data.error || "Failed to connect account.");
       }
     } catch (err) {
-      alert("Error connecting to server.");
+      alert("IMAP account management requires the local server. AI features (summarize & draft) are fully functional in this demo.");
     } finally {
       setIsAdding(false);
     }
