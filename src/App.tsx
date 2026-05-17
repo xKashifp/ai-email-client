@@ -116,21 +116,19 @@ export default function App() {
         body: JSON.stringify(imapForm)
       });
       const data = await response.json();
-      
+
       if (data.success) {
         setShowAddAccount(false);
-        setIsLoadingEmails(true);
-        await fetch('/api/emails/fetch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ accountId: data.accountId })
-        });
-        await fetchEmailsFromDB();
+        // Use emails returned directly from the serverless IMAP function
+        if (data.emails && data.emails.length > 0) {
+          setEmails(data.emails);
+          setSelectedEmail(data.emails[0]);
+        }
       } else {
         alert(data.error || "Failed to connect account.");
       }
     } catch (err) {
-      alert("IMAP account management requires the local server. AI features (summarize & draft) are fully functional in this demo.");
+      alert("Network error. Please try again.");
     } finally {
       setIsAdding(false);
     }
